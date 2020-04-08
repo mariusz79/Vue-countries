@@ -10,24 +10,40 @@
       </div>
     </div>
     <router-view/>
+    <div class="home">
+    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <SearchInput v-model="searchValue" @input="handleInput" :dark="darkOn" />
+  </div>
   </div>
 </template>
 
 <script>
+import HelloWorld from '@/components/HelloWorld.vue';
+import SearchInput from '@/components/SearchInput.vue';
+import axios from 'axios';
+
 export default {
   name: 'App',
   components: {
+    HelloWorld, SearchInput,
   },
   data() {
     return {
       darkOn: false,
       moonLine: 'https://mariusz-ecommerce.s3-eu-west-1.amazonaws.com/static/Vue/moon-line.svg',
       moonBlack: 'https://mariusz-ecommerce.s3-eu-west-1.amazonaws.com/static/Vue/moon-black.svg',
+      searchValue: '',
     };
   },
   methods: {
     darkMode() {
       this.darkOn = !this.darkOn;
+    },
+    handleInput() {
+      axios.get('https://restcountries.eu/rest/v2/alpha/col')
+        .then((response) => {
+          console.log(response);
+        });
     },
   },
 };
