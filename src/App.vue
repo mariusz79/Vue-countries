@@ -17,10 +17,16 @@
       <SelectRegion v-model="searchValue" @input="handleInput" :dark1="darkOn"/>
     </div>
     <div class="results">
-      <div v-for="key in result" :key="result[key]" class="item">
+      <div v-for="key in result" :key="result[key]" class="item" :class="{'dark-info':darkOn}">
+        <div class="top-flag">
           <img v-bind:src=key.flag class="flag">
-          <h4>{{key.name}}</h4>
-          <h4>{{key.capital}}</h4>
+        </div>
+        <div class="info" >
+          <h3>{{key.name}}</h3>
+          <div><b>Population: </b><span>{{key.population}}</span></div>
+          <div><b>Region: </b>{{key.region}}</div>
+          <div><b>Capital: </b>{{key.capital}}</div>
+        </div>
       </div>
     </div>
   </div>
@@ -57,6 +63,9 @@ export default {
           this.result = response.data;
         });
     },
+  },
+  created() {
+    this.handleInput();
   },
 };
 </script>
@@ -119,16 +128,32 @@ export default {
 .results{
   display: flex;
   flex-wrap: wrap;
+  justify-content: space-evenly;
 }
 
 .item{
-  width: 200px;
+  width: 300px;
   margin: 2rem;
   background-color: var(--var-white);
+  border-radius: 5px;
 }
 
 .flag{
-  width: 200px;
-  height: 100px;
+  object-fit: cover;
+  width: 300px;
+  height: 150px;
+  border-radius: 5px 5px 0 0;
+  -webkit-box-shadow: 0px 2px 1px 0px rgba(0, 0, 0, 0.400);
+  -moz-box-shadow: 0px 2px 1px 0px rgba(0,0,0,0.400);
+  box-shadow: 0px 2px 1px 0px rgba(0,0,0,0.400);
+}
+
+.info{
+  padding: 10px;
+}
+
+.dark-info{
+  background: var(--var-dark-blue);
+  color: var(--var-white);
 }
 </style>
