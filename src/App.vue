@@ -13,8 +13,15 @@
     <div class="home">
     <HelloWorld msg="Welcome to Your Vue.js App"/>
     <div class="searching">
-    <SearchInput v-model="searchValue" @input="handleInput" :dark="darkOn"/>
-    <SelectRegion v-model="searchValue" @input="handleInput" :dark1="darkOn"/>
+      <SearchInput v-model="searchValue" @input="handleInput" :dark="darkOn"/>
+      <SelectRegion v-model="searchValue" @input="handleInput" :dark1="darkOn"/>
+    </div>
+    <div class="results">
+      <div v-for="key in result" :key="result[key]" class="item">
+          <img v-bind:src=key.flag class="flag">
+          <h4>{{key.name}}</h4>
+          <h4>{{key.capital}}</h4>
+      </div>
     </div>
   </div>
   </div>
@@ -34,6 +41,7 @@ export default {
   data() {
     return {
       darkOn: false,
+      result: [],
       searchValue: '',
       moonLine: 'https://mariusz-ecommerce.s3-eu-west-1.amazonaws.com/static/Vue/moon-line.svg',
       moonBlack: 'https://mariusz-ecommerce.s3-eu-west-1.amazonaws.com/static/Vue/moon-black.svg',
@@ -44,9 +52,9 @@ export default {
       this.darkOn = !this.darkOn;
     },
     handleInput() {
-      axios.get('https://restcountries.eu/rest/v2/alpha/col')
+      axios.get('https://restcountries.eu/rest/v2/region/europe')
         .then((response) => {
-          console.log(response.data.name);
+          this.result = response.data;
         });
     },
   },
@@ -59,12 +67,11 @@ export default {
 --var-darker-blue: hsl(207, 26%, 17%);
 --var-very-dark-blue: #202D36;
 --var-dark-gray: hsl(0, 0%, 52%);
---var-very-light-gray: hsl(0, 0%, 98%);
+--var-very-light-gray: hsl(0, 6%, 87%);
 --var-white: hsl(0, 0%, 100%);
 }
 #app{
   font-family: 'Nunito Sans', sans-serif;
-  height: 100vh;
 }
 #nav{
   display: flex;
@@ -107,5 +114,21 @@ export default {
 .searching{
   display: flex;
   justify-content: space-between;
+}
+
+.results{
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.item{
+  width: 200px;
+  margin: 2rem;
+  background-color: var(--var-white);
+}
+
+.flag{
+  width: 200px;
+  height: 100px;
 }
 </style>

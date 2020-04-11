@@ -84,12 +84,12 @@ export default {
   }
 
   .options {
+    width: 200px;
     border: none;
     background-color: var(--var-white);
-    position: relative;
-    bottom: 10px;
+    position: absolute;
     z-index: 2;
-    transition: display(1s);
+    margin-top: 5px;
 
     & ul {
       list-style: none;
@@ -107,7 +107,7 @@ export default {
   }
 
   .visible {
-    display: block;
+    display: flex;
   }
 
   .dark1 {
