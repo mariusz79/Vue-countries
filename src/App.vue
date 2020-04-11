@@ -12,7 +12,10 @@
     <router-view/>
     <div class="home">
     <HelloWorld msg="Welcome to Your Vue.js App"/>
-    <SearchInput v-model="searchValue" @input="handleInput" :dark="darkOn" />
+    <div class="searching">
+    <SearchInput v-model="searchValue" @input="handleInput" :dark="darkOn"/>
+    <SelectRegion v-model="searchValue" @input="handleInput" :dark1="darkOn"/>
+    </div>
   </div>
   </div>
 </template>
@@ -20,19 +23,20 @@
 <script>
 import HelloWorld from '@/components/HelloWorld.vue';
 import SearchInput from '@/components/SearchInput.vue';
+import SelectRegion from '@/components/SelectRegion.vue';
 import axios from 'axios';
 
 export default {
   name: 'App',
   components: {
-    HelloWorld, SearchInput,
+    HelloWorld, SearchInput, SelectRegion,
   },
   data() {
     return {
       darkOn: false,
+      searchValue: '',
       moonLine: 'https://mariusz-ecommerce.s3-eu-west-1.amazonaws.com/static/Vue/moon-line.svg',
       moonBlack: 'https://mariusz-ecommerce.s3-eu-west-1.amazonaws.com/static/Vue/moon-black.svg',
-      searchValue: '',
     };
   },
   methods: {
@@ -42,7 +46,7 @@ export default {
     handleInput() {
       axios.get('https://restcountries.eu/rest/v2/alpha/col')
         .then((response) => {
-          console.log(response);
+          console.log(response.data.name);
         });
     },
   },
@@ -60,6 +64,7 @@ export default {
 }
 #app{
   font-family: 'Nunito Sans', sans-serif;
+  height: 100vh;
 }
 #nav{
   display: flex;
@@ -97,5 +102,10 @@ export default {
 
 .dark-app{
   background: var(--var-very-dark-blue);
+}
+
+.searching{
+  display: flex;
+  justify-content: space-between;
 }
 </style>
