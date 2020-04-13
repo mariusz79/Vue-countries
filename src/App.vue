@@ -1,9 +1,9 @@
 <template>
   <div id="app1" :class="{'light-app':!darkOn, 'dark-app':darkOn }">
     <div id="nav" :class="{'light-nav':!darkOn, 'dark-nav':darkOn }">
-      <router-link to="/" :class="{'light-nav':!darkOn,
-       'dark-nav':darkOn }"><h2>Where in the  world?</h2></router-link>
-       <div id="mode" @click="darkMode(), send()">
+      <div to="/" :class="{'light-nav':!darkOn,
+       'dark-nav':darkOn }"><h2>Where in the  world?</h2></div>
+       <div id="mode" @click="darkMode()">
         <img :src="darkOn? moonBlack : moonLine"
           alt="moon icon">
         <p>Dark Mode</p>
@@ -49,11 +49,28 @@
     </div>
     <transition name="modal" v-if="modal">
         <div class="modal-mask">
-            <div class="modal-container">
-                <p>Name: {{ name }}</p>
-                  <button class="modal-default-button" @click="modal = false">
-                    Close
-                  </button>
+            <div class="modal-container" :class="{'dark-info':darkOn}">
+                <div class="button-container">
+                  <button class="modal-default-button" @click="modal = false">Close</button>
+                </div>
+                <div class="info-container">
+                  <div class="modal-flag">
+                    <img v-bind:src=flag class="mflag">
+                  </div>
+                  <div class="minfo-left">
+                    <h3>{{name}}</h3>
+                    <div><b>Native name: </b><span>{{nativeName}}</span></div>
+                    <div><b>Population: </b><span>{{population}}</span></div>
+                    <div><b>Region: </b>{{region}}</div>
+                    <div><b>Sub Region: </b>{{subregion}}</div>
+                    <div><b>Capital: </b>{{capital}}</div>
+                  </div>
+                  <div class="minfo-right">
+                    <div><b>Top Level Domain: </b>{{topLevelDomain[0]}}</div>
+                    <div><b>Currencies: </b>{{currencies}}</div>
+                    <div><b>Languages: </b>{{languages}}</div>
+                  </div>
+                </div>
             </div>
         </div>
       </transition>
@@ -62,14 +79,13 @@
 </template>
 
 <script>
-import HelloWorld from '@/components/HelloWorld.vue';
 import SearchInput from '@/components/SearchInput.vue';
 import axios from 'axios';
 
 export default {
   name: 'App',
   components: {
-    HelloWorld, SearchInput,
+    SearchInput,
   },
   data() {
     return {
@@ -106,6 +122,20 @@ export default {
     },
     itemClicked(key) {
       this.name = key.name;
+      this.flag = key.flag;
+      this.nativeName = key.nativeName;
+      this.capital = key.capital;
+      this.population = key.population;
+      this.region = key.region;
+      this.subregion = key.subregion;
+      this.topLevelDomain = key.topLevelDomain;
+      this.currencies = key.currencies[0].name;
+      const lang = key.languages;
+      const langs = [];
+      for (let item = 0; item < lang.length; item += 1) {
+        langs.push(lang[item].name);
+      }
+      this.languages = langs.join(', ');
       this.modal = !this.modal;
     },
   },
@@ -262,11 +292,6 @@ export default {
   padding: 10px;
 }
 
-.dark-info{
-  background: var(--var-dark-blue);
-  color: var(--var-white);
-}
-
 .modal-mask {
   position: fixed;
   z-index: 9998;
@@ -282,45 +307,27 @@ export default {
 }
 
 .modal-container {
-  width: 300px;
+  width: 90vw;
   margin: 0px auto;
   padding: 20px 30px;
-  background-color: #fff;
+  background-color: var(--var-white);
   border-radius: 2px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.33);
   transition: all 0.3s ease;
   font-family: Helvetica, Arial, sans-serif;
 }
 
-.close {
-    position: relative;
-    width: 30px;
-    height: 30px;
-    padding: 30px;
-    right: 0;
-    top: 0;
-    cursor: pointer;
-    &::before,
-    &::after {
-      position: absolute;
-      top: 30px;
-      right: 20px;
-      content: '';
-      width: 20px;
-      height: 2px;
-      background: black;
-      display: block;
-    }
-    &::before {
-      transform: rotate(45deg);
-    }
-    &::after {
-      transform: rotate(-45deg);
-    }
-  }
+.mflag{
+  object-fit: cover;
+  width: 300px;
+  height: 150px;
+  -webkit-box-shadow: 0px 2px 1px 0px rgba(0, 0, 0, 0.400);
+  -moz-box-shadow: 0px 2px 1px 0px rgba(0,0,0,0.400);
+  box-shadow: 0px 2px 1px 0px rgba(0,0,0,0.400);
+}
 
-.modal-default-button {
-  float: right;
+.dark-info{
+  background-color: var(--var-dark-blue);
+  color: var(--var-white);
 }
 
 /*
