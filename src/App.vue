@@ -1,23 +1,41 @@
 <template>
-  <div id="app" :class="{'light-app':!darkOn, 'dark-app':darkOn }">
+  <div id="app1" :class="{'light-app':!darkOn, 'dark-app':darkOn }">
     <div id="nav" :class="{'light-nav':!darkOn, 'dark-nav':darkOn }">
       <router-link to="/" :class="{'light-nav':!darkOn,
        'dark-nav':darkOn }"><h2>Where in the  world?</h2></router-link>
-      <div id="mode" @click="darkMode()">
+       <div id="mode" @click="darkMode(), send()">
         <img :src="darkOn? moonBlack : moonLine"
           alt="moon icon">
         <p>Dark Mode</p>
       </div>
     </div>
-    <router-view/>
-    <div class="home">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+      <div class="home">
     <div class="searching">
       <SearchInput v-model="searchValue" @input="handleInput" :dark="darkOn"/>
-      <SelectRegion v-model="searchValue" @input="handleInput" :dark1="darkOn"/>
+      <div>
+      <div class="filter"
+          id="filter"
+          name="filter"
+          :class="{'dark1':darkOn}"
+          @click="visibility()"
+      >
+      <p>{{regionValue}}</p>
+      <span class="chevron">&#8250;</span>
+      </div>
+      <div class="options" v-if="visible" :class="{'dark1':darkOn}" @click="visibility()">
+        <ul>
+          <li @click="regionValue = 'Africa', handleRegion()">Africa</li>
+          <li @click="regionValue = 'Americas', handleRegion()">Americas</li>
+          <li @click="regionValue = 'Asia', handleRegion()">Asia</li>
+          <li @click="regionValue = 'Europe', handleRegion()">Europe</li>
+          <li @click="regionValue = 'Oceania', handleRegion()">Oceania</li>
+        </ul>
+      </div>
+      </div>
     </div>
     <div class="results">
-      <div v-for="key in result" :key="result[key]" class="item" :class="{'dark-info':darkOn}">
+      <div v-for="key in result" :key="result[key]" class="item"
+      :class="{'dark-info':darkOn}" @click="itemClicked(key)">
         <div class="top-flag">
           <img v-bind:src=key.flag class="flag">
         </div>
@@ -29,6 +47,16 @@
         </div>
       </div>
     </div>
+    <transition name="modal" v-if="modal">
+        <div class="modal-mask">
+            <div class="modal-container">
+                <p>Name: {{ name }}</p>
+                  <button class="modal-default-button" @click="modal = false">
+                    Close
+                  </button>
+            </div>
+        </div>
+      </transition>
   </div>
   </div>
 </template>
@@ -36,36 +64,56 @@
 <script>
 import HelloWorld from '@/components/HelloWorld.vue';
 import SearchInput from '@/components/SearchInput.vue';
-import SelectRegion from '@/components/SelectRegion.vue';
 import axios from 'axios';
 
 export default {
   name: 'App',
   components: {
-    HelloWorld, SearchInput, SelectRegion,
+    HelloWorld, SearchInput,
   },
   data() {
     return {
-      darkOn: false,
       result: [],
       searchValue: '',
+      visible: false,
+      regionValue: 'Filter by Region',
+      darkOn: false,
+      modal: false,
       moonLine: 'https://mariusz-ecommerce.s3-eu-west-1.amazonaws.com/static/Vue/moon-line.svg',
       moonBlack: 'https://mariusz-ecommerce.s3-eu-west-1.amazonaws.com/static/Vue/moon-black.svg',
     };
   },
   methods: {
+    visibility() {
+      this.visible = !this.visible;
+    },
     darkMode() {
       this.darkOn = !this.darkOn;
     },
     handleInput() {
-      axios.get('https://restcountries.eu/rest/v2/region/europe')
+      axios.get(`https://restcountries.eu/rest/v2/name/${this.searchValue}`)
         .then((response) => {
           this.result = response.data;
+          this.regionValue = 'Filter by Region';
         });
+    },
+    handleRegion() {
+      axios.get(`https://restcountries.eu/rest/v2/region/${this.regionValue}`)
+        .then((response) => {
+          this.result = response.data;
+          this.searchValue = '';
+        });
+    },
+    itemClicked(key) {
+      this.name = key.name;
+      this.modal = !this.modal;
     },
   },
   created() {
-    this.handleInput();
+    axios.get('https://restcountries.eu/rest/v2/region/europe')
+      .then((response) => {
+        this.result = response.data;
+      });
   },
 };
 </script>
@@ -79,8 +127,9 @@ export default {
 --var-very-light-gray: hsl(0, 6%, 87%);
 --var-white: hsl(0, 0%, 100%);
 }
-#app{
+#app1{
   font-family: 'Nunito Sans', sans-serif;
+  overflow-x: hidden;
 }
 #nav{
   display: flex;
@@ -120,10 +169,71 @@ export default {
   background: var(--var-very-dark-blue);
 }
 
+.moveInUp-enter-active{  opacity: 0;  transition: opacity 1s ease-in;}
+.moveInUp-enter-active{  animation: fadeIn 1s ease-in;}
+@keyframes fadeIn{  0%{    opacity: 0;  }  50%{    opacity: 0.5;  }  100%{    opacity: 1;  }}
+.moveInUp-leave-active{  animation: moveInUp .3s ease-in;}
+@keyframes moveInUp{ 0%{  transform: translateY(0); }  100%{  transform: translateY(-400px); }}
+
 .searching{
   display: flex;
   justify-content: space-between;
 }
+
+.filter {
+    text-indent: 20px;
+    width: 200px;
+    height: 30px;
+    border: none;
+    background-color: var(--var-white);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+
+    & p {
+      font-size: 1rem;
+    }
+
+    & .chevron {
+      position: relative;
+      transform: rotate(90deg);
+      bottom: 7px;
+      font-size: 2rem;
+    }
+  }
+
+  .options {
+    width: 200px;
+    border: none;
+    background-color: var(--var-white);
+    position: absolute;
+    z-index: 2;
+    margin-top: 5px;
+
+    & ul {
+      list-style: none;
+      padding: 10px 20px;
+    }
+
+    & li {
+      padding: 8px 0;
+      cursor: pointer;
+    }
+
+    & li:hover {
+      border-bottom: 1px solid var(--var-very-dark-blue);
+    }
+  }
+
+  .visible {
+    display: flex;
+  }
+
+  .dark1 {
+    background-color: var(--var-dark-blue);
+    color: #abb6c1;
+  }
 
 .results{
   display: flex;
@@ -155,5 +265,84 @@ export default {
 .dark-info{
   background: var(--var-dark-blue);
   color: var(--var-white);
+}
+
+.modal-mask {
+  position: fixed;
+  z-index: 9998;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: opacity 0.3s ease;
+}
+
+.modal-container {
+  width: 300px;
+  margin: 0px auto;
+  padding: 20px 30px;
+  background-color: #fff;
+  border-radius: 2px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.33);
+  transition: all 0.3s ease;
+  font-family: Helvetica, Arial, sans-serif;
+}
+
+.close {
+    position: relative;
+    width: 30px;
+    height: 30px;
+    padding: 30px;
+    right: 0;
+    top: 0;
+    cursor: pointer;
+    &::before,
+    &::after {
+      position: absolute;
+      top: 30px;
+      right: 20px;
+      content: '';
+      width: 20px;
+      height: 2px;
+      background: black;
+      display: block;
+    }
+    &::before {
+      transform: rotate(45deg);
+    }
+    &::after {
+      transform: rotate(-45deg);
+    }
+  }
+
+.modal-default-button {
+  float: right;
+}
+
+/*
+ * The following styles are auto-applied to elements with
+ * transition="modal" when their visibility is toggled
+ * by Vue.js.
+ *
+ * You can easily play with the modal transition by editing
+ * these styles.
+ */
+
+.modal-enter {
+  opacity: 0;
+}
+
+.modal-leave-active {
+  opacity: 0;
+}
+
+.modal-enter .modal-container,
+.modal-leave-active .modal-container {
+  -webkit-transform: scale(1.1);
+  transform: scale(1.1);
 }
 </style>

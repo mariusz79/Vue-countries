@@ -1,23 +1,26 @@
 <template>
-  <div class="home">
-  </div>
+  
 </template>
 
 <script>
-// @ is an alias to /src
+
+
 export default {
   name: 'Home',
   components: {
+    
+  },
+  props: {
   },
   data() {
-    return {
-    };
   },
   methods: {
+  },
+  created() {
   },
 };
 </script>
 
-<style>
+<style lang="scss">
 
 </style>
