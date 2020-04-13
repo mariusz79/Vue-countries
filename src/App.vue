@@ -41,7 +41,7 @@
         </div>
         <div class="info" >
           <h3>{{key.name}}</h3>
-          <div><b>Population: </b><span>{{key.population}}</span></div>
+          <div><b>Population: </b><span>{{addComas(key.population)}}</span></div>
           <div><b>Region: </b>{{key.region}}</div>
           <div><b>Capital: </b>{{key.capital}}</div>
         </div>
@@ -60,7 +60,7 @@
                   <div class="minfo-left">
                     <h3>{{name}}</h3>
                     <div><b>Native name: </b><span>{{nativeName}}</span></div>
-                    <div><b>Population: </b><span>{{population}}</span></div>
+                    <div><b>Population: </b><span>{{addComas(population)}}</span></div>
                     <div><b>Region: </b>{{region}}</div>
                     <div><b>Sub Region: </b>{{subregion}}</div>
                     <div><b>Capital: </b>{{capital}}</div>
@@ -102,6 +102,11 @@ export default {
   methods: {
     visibility() {
       this.visible = !this.visible;
+    },
+    addComas(num) {
+      const numparts = num.toString().split('.');
+      numparts[0] = numparts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+      return numparts.join('.');
     },
     darkMode() {
       this.darkOn = !this.darkOn;
@@ -198,12 +203,6 @@ export default {
 .dark-app{
   background: var(--var-very-dark-blue);
 }
-
-.moveInUp-enter-active{  opacity: 0;  transition: opacity 1s ease-in;}
-.moveInUp-enter-active{  animation: fadeIn 1s ease-in;}
-@keyframes fadeIn{  0%{    opacity: 0;  }  50%{    opacity: 0.5;  }  100%{    opacity: 1;  }}
-.moveInUp-leave-active{  animation: moveInUp .3s ease-in;}
-@keyframes moveInUp{ 0%{  transform: translateY(0); }  100%{  transform: translateY(-400px); }}
 
 .searching{
   display: flex;
