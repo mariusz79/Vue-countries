@@ -1,80 +1,87 @@
 <template>
   <div id="app1" :class="{'light-app':!darkOn, 'dark-app':darkOn }">
     <div id="nav" :class="{'light-nav':!darkOn, 'dark-nav':darkOn }">
-      <div to="/" :class="{'light-nav':!darkOn,
-       'dark-nav':darkOn }"><h2>Where in the  world?</h2></div>
-       <div id="mode" @click="darkMode()">
-        <img :src="darkOn? moonBlack : moonLine"
-          alt="moon icon">
-        <p>Dark Mode</p>
-      </div>
-    </div>
-      <div class="home">
-    <div class="searching">
-      <SearchInput v-model="searchValue" @input="handleInput" :dark="darkOn"/>
-      <div>
-      <div class="filter"
-          id="filter"
-          name="filter"
-          :class="{'dark1':darkOn}"
-          @click="visibility()"
-      >
-      <p>{{regionValue}}</p>
-      <span class="chevron">&#8250;</span>
-      </div>
-      <div class="options" v-if="visible" :class="{'dark1':darkOn}" @click="visibility()">
-        <ul>
-          <li @click="regionValue = 'Africa', handleRegion()">Africa</li>
-          <li @click="regionValue = 'Americas', handleRegion()">Americas</li>
-          <li @click="regionValue = 'Asia', handleRegion()">Asia</li>
-          <li @click="regionValue = 'Europe', handleRegion()">Europe</li>
-          <li @click="regionValue = 'Oceania', handleRegion()">Oceania</li>
-        </ul>
-      </div>
-      </div>
-    </div>
-    <div class="results">
-      <div v-for="key in result" :key="result[key]" class="item"
-      :class="{'dark-info':darkOn}" @click="itemClicked(key)">
-        <div class="top-flag">
-          <img v-bind:src=key.flag class="flag">
+      <div class="container-nav">
+        <div class="navbar">
+        <div to="/" :class="{'light-nav':!darkOn,
+        'dark-nav':darkOn }"><h2>Where in the  world?</h2>
         </div>
-        <div class="info" >
-          <h3>{{key.name}}</h3>
-          <div><b>Population: </b><span>{{addComas(key.population)}}</span></div>
-          <div><b>Region: </b>{{key.region}}</div>
-          <div><b>Capital: </b>{{key.capital}}</div>
+        <div id="mode" @click="darkMode()">
+          <img :src="darkOn? moonBlack : moonLine"
+            alt="moon icon">
+          <p>Dark Mode</p>
         </div>
       </div>
+      </div>
     </div>
-    <transition name="modal" v-if="modal">
-        <div class="modal-mask">
-            <div class="modal-container" :class="{'dark-info':darkOn}">
-                <div class="button-container">
-                  <button class="modal-default-button" @click="modal = false">Close</button>
-                </div>
-                <div class="info-container">
-                  <div class="modal-flag">
-                    <img v-bind:src=flag class="mflag">
-                  </div>
-                  <div class="minfo-left">
-                    <h3>{{name}}</h3>
-                    <div><b>Native name: </b><span>{{nativeName}}</span></div>
-                    <div><b>Population: </b><span>{{addComas(population)}}</span></div>
-                    <div><b>Region: </b>{{region}}</div>
-                    <div><b>Sub Region: </b>{{subregion}}</div>
-                    <div><b>Capital: </b>{{capital}}</div>
-                  </div>
-                  <div class="minfo-right">
-                    <div><b>Top Level Domain: </b>{{topLevelDomain[0]}}</div>
-                    <div><b>Currencies: </b>{{currencies}}</div>
-                    <div><b>Languages: </b>{{languages}}</div>
-                  </div>
+    <div class="home">
+      <div class="container">
+        <div class="searching">
+          <SearchInput v-model="searchValue" @input="handleInput" :dark="darkOn"/>
+          <div class="region">
+            <div class="filter"
+                id="filter"
+                name="filter"
+                :class="{'dark1':darkOn}"
+                @click="visibility()"
+            >
+            <p>{{regionValue}}</p>
+            <span class="chevron">&#8250;</span>
+            </div>
+            <div class="options" v-if="visible" :class="{'dark1':darkOn}" @click="visibility()">
+              <ul>
+                <li @click="regionValue = 'Africa', handleRegion()">Africa</li>
+                <li @click="regionValue = 'Americas', handleRegion()">Americas</li>
+                <li @click="regionValue = 'Asia', handleRegion()">Asia</li>
+                <li @click="regionValue = 'Europe', handleRegion()">Europe</li>
+                <li @click="regionValue = 'Oceania', handleRegion()">Oceania</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="results">
+          <div v-for="key in result" :key="result[key]" class="item"
+          :class="{'dark-info':darkOn}" @click="itemClicked(key)">
+            <div class="top-flag">
+              <img v-bind:src=key.flag class="flag" :class="{'dark-flag':darkOn}">
+            </div>
+            <div class="info" >
+              <h3>{{key.name}}</h3>
+              <div><b>Population: </b><span>{{addComas(key.population)}}</span></div>
+              <div><b>Region: </b>{{key.region}}</div>
+              <div><b>Capital: </b>{{key.capital}}</div>
+            </div>
+          </div>
+        </div>
+        <transition name="modal" v-if="modal">
+            <div class="modal-mask">
+                <div class="modal-container" :class="{'dark-info':darkOn}">
+                    <div class="button-container">
+                      <button class="modal-default-button" @click="modal = false">Close</button>
+                    </div>
+                    <div class="info-container">
+                      <div class="modal-flag">
+                        <img v-bind:src=flag class="mflag" :class="{'dark-flag':darkOn}">
+                      </div>
+                      <div class="minfo-left">
+                        <h3>{{name}}</h3>
+                        <div><b>Native name: </b><span>{{nativeName}}</span></div>
+                        <div><b>Population: </b><span>{{addComas(population)}}</span></div>
+                        <div><b>Region: </b>{{region}}</div>
+                        <div><b>Sub Region: </b>{{subregion}}</div>
+                        <div><b>Capital: </b>{{capital}}</div>
+                      </div>
+                      <div class="minfo-right">
+                        <div><b>Top Level Domain: </b>{{topLevelDomain[0]}}</div>
+                        <div><b>Currencies: </b>{{currencies}}</div>
+                        <div><b>Languages: </b>{{languages}}</div>
+                      </div>
+                    </div>
                 </div>
             </div>
-        </div>
       </transition>
-  </div>
+    </div>
+    </div>
   </div>
 </template>
 
@@ -159,17 +166,24 @@ export default {
 --var-darker-blue: hsl(207, 26%, 17%);
 --var-very-dark-blue: #202D36;
 --var-dark-gray: hsl(0, 0%, 52%);
---var-very-light-gray: hsl(0, 6%, 87%);
+--var-very-light-gray: hsla(0, 0%, 96.5%, 0.79);
 --var-white: hsl(0, 0%, 100%);
 }
 #app1{
   font-family: 'Nunito Sans', sans-serif;
   overflow-x: hidden;
+  height: 100vh;
 }
 #nav{
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
+}
 
+.container-nav{
+  width: 92vw;
+}
+
+#nav{
   & a {
     text-decoration: none;
   }
@@ -184,6 +198,11 @@ export default {
     max-height: 15px;
     padding-right: 5px;
   }
+}
+
+.navbar{
+  display: flex;
+  justify-content: space-between;
 }
 
 .light-nav{
@@ -204,16 +223,24 @@ export default {
   background: var(--var-very-dark-blue);
 }
 
+.home{
+  display: flex;
+  justify-content: center;
+}
+.container{
+  max-width: 99vw;
+}
 .searching{
   display: flex;
   justify-content: space-between;
+  margin-top: 2rem;
 }
 
 .filter {
     text-indent: 20px;
-    width: 200px;
-    height: 30px;
+    width: 12rem;
     border: none;
+    border-radius: 3px;
     background-color: var(--var-white);
     display: flex;
     align-items: center;
@@ -232,14 +259,25 @@ export default {
     }
   }
 
+.filter:hover{
+    outline: none;
+    box-shadow: 0 0px 4px 1px rgba(204, 204, 204, 0.619);
+  }
+
+.filter .dark1:hover{
+    outline: none;
+    box-shadow: 0 0px 2px 1px rgba(255,255,255, .5);
+  }
+
   .options {
-    width: 200px;
+    width: 12rem;
     border: none;
+    border-radius: 3px;
     background-color: var(--var-white);
     position: absolute;
     z-index: 2;
     margin-top: 5px;
-
+    box-shadow: 0 0px 4px 1px rgba(204, 204, 204, 0.619);
     & ul {
       list-style: none;
       padding: 10px 20px;
@@ -253,7 +291,12 @@ export default {
     & li:hover {
       border-bottom: 1px solid var(--var-very-dark-blue);
     }
+
   }
+
+  .dark1 li:hover {
+      border-bottom: 1px solid rgba(255,255,255, .5);
+    }
 
   .visible {
     display: flex;
@@ -265,26 +308,70 @@ export default {
   }
 
 .results{
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-evenly;
+  margin-top: 50px;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-gap: 6vw;
+  justify-items: center;
+  @media (min-width: 500px) {
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 3vw;
+  }
+  @media (min-width: 768px) {
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-gap: 3vw;
+  }
+  @media (min-width: 1100px) {
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-gap: 4vw;
+  }
 }
 
 .item{
-  width: 300px;
-  margin: 2rem;
-  background-color: var(--var-white);
-  border-radius: 5px;
+    width: 80vw;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: 50%;
+    background-color: var(--var-white);
+    border-radius: 5px;
+    box-shadow: 0 0px 4px 1px rgba(204, 204, 204, 0.619);
+    @media (min-width: 500px) {
+    width: 45vw;
+    height: 345px;
+  }
+    @media (min-width: 768px) {
+      width: 30vw;
+      height: 345px;
+    }
+    @media (min-width: 1100px) {
+      width: 20vw;
+      height: 345px;
+    }
 }
+
+.item:hover{
+    outline: none;
+    box-shadow: 0 0px 4px 7px rgba(204, 204, 204, 0.619);
+  }
 
 .flag{
   object-fit: cover;
-  width: 300px;
-  height: 150px;
+  height: 180px;
   border-radius: 5px 5px 0 0;
-  -webkit-box-shadow: 0px 2px 1px 0px rgba(0, 0, 0, 0.400);
-  -moz-box-shadow: 0px 2px 1px 0px rgba(0,0,0,0.400);
-  box-shadow: 0px 2px 1px 0px rgba(0,0,0,0.400);
+  -webkit-box-shadow: 0px 2px 1px 0px hsla(0, 0%, 96.5%, 0.79);
+  -moz-box-shadow: 0px 2px 1px 0px hsla(0, 0%, 96.5%, 0.79);
+  box-shadow: 0px 2px 1px 0px hsla(0, 0%, 96.5%, 0.79);
+  width: 80vw;
+  @media (min-width: 500px) {
+    width: 45vw;
+    height: 150px;
+  }
+  @media (min-width: 768px) {
+      width: 30vw;
+    }
+    @media (min-width: 1100px) {
+      width: 20vw;
+    }
 }
 
 .info{
@@ -319,16 +406,25 @@ export default {
   object-fit: cover;
   width: 300px;
   height: 150px;
-  -webkit-box-shadow: 0px 2px 1px 0px rgba(0, 0, 0, 0.400);
-  -moz-box-shadow: 0px 2px 1px 0px rgba(0,0,0,0.400);
-  box-shadow: 0px 2px 1px 0px rgba(0,0,0,0.400);
+  -webkit-box-shadow: 0px 2px 1px 0px hsla(0, 0%, 96.5%, 0.79);
+  -moz-box-shadow: 0px 2px 1px 0px hsla(0, 0%, 96.5%, 0.79);
+  box-shadow: 0px 2px 1px 0px hsla(0, 0%, 96.5%, 0.79);
 }
 
 .dark-info{
   background-color: var(--var-dark-blue);
   color: var(--var-white);
+  box-shadow: none;
 }
 
+.dark-flag{
+  box-shadow: none;
+}
+
+.dark-info:hover{
+    outline: none;
+    box-shadow: 0 0px 4px 3px rgba(255,255,255, .5);
+  }
 /*
  * The following styles are auto-applied to elements with
  * transition="modal" when their visibility is toggled
