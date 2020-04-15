@@ -2,7 +2,7 @@
 
 >The goal of the app is to integrate with the [REST Countries API](https://restcountries.eu) to pull country data and display it like in the designs provided by [frontmentor.io](https://www.frontendmentor.io/challenges/rest-countries-api-with-color-theme-switcher-5cacc469fec04111f7b848ca).
 
->Users of thhe app should be able to:
+>Users of the app should be able to:
 - See all countries from the API on the homepage
 - Search for a country using an `input` field
 - Filter countries by region
