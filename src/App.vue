@@ -1,18 +1,18 @@
 <template>
   <div id="app" :class="{'light-app':!darkOn, 'dark-app':darkOn }">
     <div class="nav" :class="{'light-nav':!darkOn, 'dark-nav':darkOn,
-     'nav-shadow-light':!darkOn, 'nav-shadow-dark':darkOn }">
+      'nav-shadow-light':!darkOn, 'nav-shadow-dark':darkOn }">
       <div class="container-nav">
         <div class="navbar">
-        <div to="/" :class="{'light-nav':!darkOn,
-        'dark-nav':darkOn }"><h2 class="logo">Where in the  world?</h2>
+          <div
+          :class="{'light-nav':!darkOn, 'dark-nav':darkOn }">
+            <h2 class="logo">Where in the  world?</h2>
+          </div>
+          <div id="mode" @click="darkMode()">
+            <img :src="darkOn? moonBlack : moonLine" alt="moon icon">
+            <p class="mode-text">Dark Mode</p>
+          </div>
         </div>
-        <div id="mode" @click="darkMode()">
-          <img :src="darkOn? moonBlack : moonLine"
-            alt="moon icon">
-          <p class="mode-text">Dark Mode</p>
-        </div>
-      </div>
       </div>
     </div>
     <div class="home">
@@ -24,8 +24,8 @@
                 :class="{'dark1':darkOn}"
                 @click="visibility()"
             >
-            <p>{{regionValue}}</p>
-            <span class="chevron">&#8250;</span>
+              <p>{{regionValue}}</p>
+              <span class="chevron">&#8250;</span>
             </div>
             <div :class="{'dark-options':darkOn}" class="options"
             v-if="visible" @click="visibility()">
@@ -55,32 +55,41 @@
         </div>
         <transition name="modal" v-if="modal">
             <div class="modal-mask">
-                <div class="modal-container" :class="{'dark-info':darkOn}">
+                <div class="modal-container" :class="{'dark-modal':darkOn}">
+                  <div class="modal-content">
                     <div class="button-container">
-                      <button class="modal-default-button" @click="modal = false">Close</button>
+                      <button class="modal-button" :class="{'dark1':darkOn}"
+                      @click="modal = false">&#8592; &nbsp;&nbsp;Back</button>
                     </div>
                     <div class="info-container">
-                      <div class="modal-flag">
-                        <img v-bind:src=flag class="mflag" :class="{'dark-flag':darkOn}">
-                      </div>
-                      <div class="minfo-left">
-                        <h3>{{name}}</h3>
-                        <div><b>Native name: </b><span>{{nativeName}}</span></div>
-                        <div><b>Population: </b><span>{{addComas(population)}}</span></div>
-                        <div><b>Region: </b>{{region}}</div>
-                        <div><b>Sub Region: </b>{{subregion}}</div>
-                        <div><b>Capital: </b>{{capital}}</div>
-                      </div>
-                      <div class="minfo-right">
-                        <div><b>Top Level Domain: </b>{{topLevelDomain[0]}}</div>
-                        <div><b>Currencies: </b>{{currencies}}</div>
-                        <div><b>Languages: </b>{{languages}}</div>
-                      </div>
+                        <div class="modal-flag">
+                          <img v-bind:src=flag class="mflag" :class="{'dark-flag':darkOn}">
+                        </div>
+                        <div class="infos">
+                          <div class="capital">
+                              <h3>{{name}}</h3>
+                          </div>
+                          <div class="rest-info">
+                            <div class="minfo-left">
+                                <div><b>Native name: </b><span>{{nativeName}}</span></div>
+                                <div><b>Population: </b><span>{{addComas(population)}}</span></div>
+                                <div><b>Region: </b>{{region}}</div>
+                                <div><b>Sub Region: </b>{{subregion}}</div>
+                                <div><b>Capital: </b>{{capital}}</div>
+                              </div>
+                            <div class="minfo-right">
+                                <div><b>Top Level Domain: </b>{{topLevelDomain[0]}}</div>
+                                <div><b>Currencies: </b>{{currencies}}</div>
+                                <div><b>Languages: </b>{{languages}}</div>
+                              </div>
+                            </div>
+                          </div>
                     </div>
                 </div>
+                </div>
             </div>
-      </transition>
-    </div>
+        </transition>
+      </div>
     </div>
     <ScrollUp :scroll-duration="1000" :scroll-y="250">Up</ScrollUp>
   </div>
@@ -167,18 +176,20 @@ export default {
 </script>
 
 <style lang="scss">
+//variables------------------------------
 *{
---var-dark-blue: #2B3744;
---var-darker-blue: hsl(207, 26%, 17%);
 --var-very-dark-blue: #202D36;
 --var-dark-gray: hsl(0, 0%, 52%);
 --var-very-light-gray: hsla(0, 0%, 96.5%, 0.79);
 --var-white: hsl(0, 0%, 100%);
 }
+//main app-------------------------------
 #app{
   font-family: 'Nunito Sans', sans-serif;
   overflow-x: hidden;
+  min-height: 100vh;
 }
+//navbar--------------------------------
 .nav{
   display: flex;
   justify-content: center;
@@ -231,6 +242,7 @@ export default {
 .nav-shadow-light{
    box-shadow: 0 0px 2px 1px rgba(210, 206, 206, 0.5);
 }
+
 .nav-shadow-dark{
   box-shadow: none;
 }
@@ -242,8 +254,8 @@ export default {
   .mode-text{
     font-size: 12px;
   }
-  }
-
+}
+//home section------------------------------
 .home{
   display: flex;
   justify-content: center;
@@ -251,6 +263,7 @@ export default {
 .container{
   max-width: 99vw;
 }
+//search-input------------------------------
 .searching{
   margin-top: 2rem;
   @media (min-width: 500px) {
@@ -258,7 +271,7 @@ export default {
   justify-content: space-between;
   }
 }
-
+//filter region-----------------------------
 .filter {
     text-indent: 20px;
     width: 12rem;
@@ -327,25 +340,19 @@ export default {
     box-shadow: 0 0px 2px 1px rgba(255,255,255, .5);
   }
 
-  .dark-options li:hover {
+.dark-options li:hover {
       border-bottom: 1px solid rgba(255,255,255, .5);
     }
 
-  .visible {
+.visible {
     display: flex;
   }
 
-  .dark1 {
-    background-color: var(--var-dark-blue);
-    color: #abb6c1;
-    box-shadow: none;
-  }
-
-  .dark-options {
+.dark-options {
     background-color: var(--var-dark-blue);
     color: #abb6c1;
   }
-
+//results----------------------------------------
 .results{
   margin-top: 50px;
   display: grid;
@@ -408,7 +415,7 @@ export default {
   @media (min-width: 768px) {
       width: 30vw;
     }
-    @media (min-width: 1100px) {
+  @media (min-width: 1100px) {
       width: 20vw;
     }
 }
@@ -417,6 +424,7 @@ export default {
   padding: 10px;
 }
 
+//modal ---------------------------------------------
 .modal-mask {
   position: fixed;
   z-index: 9998;
@@ -424,7 +432,7 @@ export default {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.7);
+  background-color: rgba(0, 0, 0, 0.98);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -432,27 +440,93 @@ export default {
 }
 
 .modal-container {
-  width: 90vw;
+  width: 99%;
   margin: 0px auto;
   padding: 20px 30px;
-  background-color: var(--var-white);
   border-radius: 2px;
   transition: all 0.3s ease;
   font-family: Helvetica, Arial, sans-serif;
+  background-color: #f5f4f4;
+  @media (min-width: 430px) {
+    width: 70%;
+    }
+  @media (min-width: 540px) {
+    width: 60%;
+    }
+  @media (min-width: 640px) {
+    width: 50%;
+    }
+  @media (min-width: 768px) {
+    width: 40%;
+    }
+  @media (min-width: 992px) {
+    width: 99%;
+    height: 98%;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    padding: 0 10vw;
+    align-items: center;
+    }
 }
+
+.modal-content{
+  @media (min-width: 992px) {
+    margin-bottom: 7rem;
+    }
+}
+
+.info-container {
+  @media (min-width: 992px) {
+    display: flex;
+    justify-content: space-between;
+    }
+}
+
+.modal-button{
+  padding: 10px 20px;
+  border-radius: 4px;
+  background-color: var(--var-white);
+  border: none;
+  -webkit-box-shadow: 0 0px 1px 1px rgba(230, 226, 226, 0.62);
+  -moz-box-shadow: 0 0px 1px 1px rgba(230, 226, 226, 0.62);
+  box-shadow: 0 0px 1px 1px rgba(230, 226, 226, 0.62);
+  font-size: 14px;
+  @media (min-width: 992px) {
+    margin-bottom: 7rem;
+    }
+}
+
+.modal-button:hover {
+    outline: none;
+    -webkit-box-shadow: 0 0px 4px 1px rgba(204, 204, 204, 0.619);
+    -moz-box-shadow: 0 0px 4px 1px rgba(204, 204, 204, 0.619);
+    box-shadow: 0 0px 4px 1px rgba(204, 204, 204, 0.619);
+  }
 
 .mflag{
   object-fit: cover;
-  width: 300px;
-  height: 150px;
+  width: 100%;
+  height: 30vh;
   -webkit-box-shadow: 0px 2px 1px 0px hsla(0, 0%, 96.5%, 0.79);
   -moz-box-shadow: 0px 2px 1px 0px hsla(0, 0%, 96.5%, 0.79);
   box-shadow: 0px 2px 1px 0px hsla(0, 0%, 96.5%, 0.79);
+  margin: 1.5rem 0 .5rem 0;
+  @media (min-width: 992px) {
+    height: 35vh;
+    }
+}
+
+.rest-info{
+   @media (min-width: 992px) {
+    display: flex;
+    align-items: baseline;
+    }
 }
 
 .dark-info{
   background-color: var(--var-dark-blue);
-  color: var(--var-white);
+  color: var(--var-very-light-gray);
   box-shadow: none;
 }
 
@@ -464,13 +538,46 @@ export default {
     outline: none;
     box-shadow: 0 0px 4px 3px rgba(255,255,255, .5);
   }
+
+.dark-modal{
+  background-color: var(--var-very-dark-blue);
+  color: var(--var-very-light-gray);
+  box-shadow: none;
+}
+
+.dark-modal:hover{
+    box-shadow: none;
+  }
+
+.minfo-left div, .minfo-right div{
+  padding: 5px 0;
+}
+
+.minfo-right{
+  margin-top: 1rem;
+}
+.minfo-left{
+  @media (min-width: 992px) {
+  padding: 0 4vw;
+    }
+}
+
+.capital h3{
+  @media (min-width: 992px) {
+  padding-left: 4vw;
+  font-size: 1.6rem;
+    }
+}
+
+.dark1 {
+    background-color: var(--var-dark-blue);
+    color: #abb6c1;
+    box-shadow: none;
+  }
 /*
  * The following styles are auto-applied to elements with
  * transition="modal" when their visibility is toggled
  * by Vue.js.
- *
- * You can easily play with the modal transition by editing
- * these styles.
  */
 
 .modal-enter {
@@ -485,7 +592,5 @@ export default {
 .modal-leave-active .modal-container {
   -webkit-transform: scale(1.1);
   transform: scale(1.1);
-}
-.vue-scroll-up{
 }
 </style>
