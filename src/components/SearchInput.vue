@@ -39,7 +39,9 @@ export default {
 }
   input {
     text-indent: 3rem;
-    width: 40vw;
+    padding: 18px;
+    margin-bottom: 1rem;
+    width: 90vw;
     border: none;
     border-radius: 3px;
     background-image: url('https://mariusz-ecommerce.s3-eu-west-1.amazonaws.com/static/Vue/search-line.svg');
@@ -48,6 +50,14 @@ export default {
     background-position-y: 1rem;
     background-position-x: 1rem;
     background-color: var(--var-white);
+    -webkit-box-shadow: 0 0px 1px 1px rgba(230, 226, 226, 0.62);
+    -moz-box-shadow: 0 0px 1px 1px rgba(230, 226, 226, 0.62);
+    box-shadow: 0 0px 1px 1px rgba(230, 226, 226, 0.62);
+    @media (min-width: 500px) {
+    padding: 0;
+    margin-bottom: 0;
+    width: 40vw;
+  }
   }
   input:focus, input:hover {
     outline: none;
@@ -58,7 +68,7 @@ export default {
 
   input .dark:focus, input .dark:hover {
     outline: none;
-    -webkit-box-shadow: 0 0px 2px 1px rgba(255,255,255, .5);
+    -webkit-box-shadow: 0 0px 2px 3px rgba(255,255,255, .5);
     -moz-box-shadow: 0 0px 2px 1px rgba(255,255,255, .5);
     box-shadow: 0 0px 2px 1px rgba(255,255,255, .5);
   }
@@ -71,5 +81,6 @@ export default {
     background-position-x: 1rem;
     background-color: var(--var-dark-blue);
     color: var(--var-very-light-gray);
+    box-shadow: none;
   }
 </style>

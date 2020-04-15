@@ -1,15 +1,16 @@
 <template>
-  <div id="app1" :class="{'light-app':!darkOn, 'dark-app':darkOn }">
-    <div id="nav" :class="{'light-nav':!darkOn, 'dark-nav':darkOn }">
+  <div id="app" :class="{'light-app':!darkOn, 'dark-app':darkOn }">
+    <div class="nav" :class="{'light-nav':!darkOn, 'dark-nav':darkOn,
+     'nav-shadow-light':!darkOn, 'nav-shadow-dark':darkOn }">
       <div class="container-nav">
         <div class="navbar">
         <div to="/" :class="{'light-nav':!darkOn,
-        'dark-nav':darkOn }"><h2>Where in the  world?</h2>
+        'dark-nav':darkOn }"><h2 class="logo">Where in the  world?</h2>
         </div>
         <div id="mode" @click="darkMode()">
           <img :src="darkOn? moonBlack : moonLine"
             alt="moon icon">
-          <p>Dark Mode</p>
+          <p class="mode-text">Dark Mode</p>
         </div>
       </div>
       </div>
@@ -20,15 +21,14 @@
           <SearchInput v-model="searchValue" @input="handleInput" :dark="darkOn"/>
           <div class="region">
             <div class="filter"
-                id="filter"
-                name="filter"
                 :class="{'dark1':darkOn}"
                 @click="visibility()"
             >
             <p>{{regionValue}}</p>
             <span class="chevron">&#8250;</span>
             </div>
-            <div class="options" v-if="visible" :class="{'dark1':darkOn}" @click="visibility()">
+            <div :class="{'dark-options':darkOn}" class="options"
+            v-if="visible" @click="visibility()">
               <ul>
                 <li @click="regionValue = 'Africa', handleRegion()">Africa</li>
                 <li @click="regionValue = 'Americas', handleRegion()">Americas</li>
@@ -82,17 +82,20 @@
       </transition>
     </div>
     </div>
+    <ScrollUp :scroll-duration="1000" :scroll-y="250">Up</ScrollUp>
   </div>
 </template>
 
 <script>
 import SearchInput from '@/components/SearchInput.vue';
 import axios from 'axios';
+import ScrollUp from 'vue-scroll-up';
+import 'vue-scroll-up/dist/style.css';
 
 export default {
-  name: 'App',
+  name: 'app',
   components: {
-    SearchInput,
+    SearchInput, ScrollUp,
   },
   data() {
     return {
@@ -107,6 +110,9 @@ export default {
     };
   },
   methods: {
+    scrollToTop() {
+      window.scrollTo(0, 0);
+    },
     visibility() {
       this.visible = !this.visible;
     },
@@ -169,12 +175,11 @@ export default {
 --var-very-light-gray: hsla(0, 0%, 96.5%, 0.79);
 --var-white: hsl(0, 0%, 100%);
 }
-#app1{
+#app{
   font-family: 'Nunito Sans', sans-serif;
   overflow-x: hidden;
-  height: 100vh;
 }
-#nav{
+.nav{
   display: flex;
   justify-content: center;
 }
@@ -183,7 +188,7 @@ export default {
   width: 92vw;
 }
 
-#nav{
+.nav{
   & a {
     text-decoration: none;
   }
@@ -223,6 +228,22 @@ export default {
   background: var(--var-very-dark-blue);
 }
 
+.nav-shadow-light{
+   box-shadow: 0 0px 2px 1px rgba(210, 206, 206, 0.5);
+}
+.nav-shadow-dark{
+  box-shadow: none;
+}
+
+@media (max-width: 500px) {
+  .logo{
+    font-size: 1rem;
+  }
+  .mode-text{
+    font-size: 12px;
+  }
+  }
+
 .home{
   display: flex;
   justify-content: center;
@@ -231,9 +252,11 @@ export default {
   max-width: 99vw;
 }
 .searching{
+  margin-top: 2rem;
+  @media (min-width: 500px) {
   display: flex;
   justify-content: space-between;
-  margin-top: 2rem;
+  }
 }
 
 .filter {
@@ -245,6 +268,9 @@ export default {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    -webkit-box-shadow: 0 0px 1px 1px rgba(230, 226, 226, 0.62);
+    -moz-box-shadow: 0 0px 1px 1px rgba(230, 226, 226, 0.62);
+    box-shadow: 0 0px 1px 1px rgba(230, 226, 226, 0.62);
     cursor: pointer;
 
     & p {
@@ -261,15 +287,12 @@ export default {
 
 .filter:hover{
     outline: none;
+    -webkit-box-shadow: 0 0px 4px 1px rgba(204, 204, 204, 0.619);
+    -moz-box-shadow: 0 0px 4px 1px rgba(204, 204, 204, 0.619);
     box-shadow: 0 0px 4px 1px rgba(204, 204, 204, 0.619);
   }
 
-.filter .dark1:hover{
-    outline: none;
-    box-shadow: 0 0px 2px 1px rgba(255,255,255, .5);
-  }
-
-  .options {
+.options {
     width: 12rem;
     border: none;
     border-radius: 3px;
@@ -277,6 +300,9 @@ export default {
     position: absolute;
     z-index: 2;
     margin-top: 5px;
+    outline: none;
+    -webkit-box-shadow: 0 0px 4px 1px rgba(204, 204, 204, 0.619);
+    -moz-box-shadow: 0 0px 4px 1px rgba(204, 204, 204, 0.619);
     box-shadow: 0 0px 4px 1px rgba(204, 204, 204, 0.619);
     & ul {
       list-style: none;
@@ -294,7 +320,14 @@ export default {
 
   }
 
-  .dark1 li:hover {
+.dark1:hover{
+    outline: none;
+    -webkit-box-shadow: 0 0px 2px 3px rgba(255,255,255, .5);
+    -moz-box-shadow: 0 0px 2px 1px rgba(255,255,255, .5);
+    box-shadow: 0 0px 2px 1px rgba(255,255,255, .5);
+  }
+
+  .dark-options li:hover {
       border-bottom: 1px solid rgba(255,255,255, .5);
     }
 
@@ -303,6 +336,12 @@ export default {
   }
 
   .dark1 {
+    background-color: var(--var-dark-blue);
+    color: #abb6c1;
+    box-shadow: none;
+  }
+
+  .dark-options {
     background-color: var(--var-dark-blue);
     color: #abb6c1;
   }
@@ -446,5 +485,7 @@ export default {
 .modal-leave-active .modal-container {
   -webkit-transform: scale(1.1);
   transform: scale(1.1);
+}
+.vue-scroll-up{
 }
 </style>
