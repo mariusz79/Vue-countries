@@ -42,9 +42,7 @@
         <div class="results">
           <div v-for="key in result" :key="result[key]" class="item"
           :class="{'dark-info':darkOn}" @click="itemClicked(key)">
-            <div class="top-flag">
               <img v-bind:src=key.flag class="flag" :class="{'dark-flag':darkOn}">
-            </div>
             <div class="info" >
               <h3>{{key.name}}</h3>
               <div><b>Population: </b><span>{{addComas(key.population)}}</span></div>
@@ -56,15 +54,8 @@
         <transition name="modal" v-if="modal">
             <div class="modal-mask">
                 <div class="modal-container" :class="{'dark-modal':darkOn}">
-                  <div class="modal-content">
-                    <div class="button-container">
-                      <button class="modal-button" :class="{'dark1':darkOn}"
-                      @click="modal = false">&#8592; &nbsp;&nbsp;Back</button>
-                    </div>
                     <div class="info-container">
-                        <div class="modal-flag">
                           <img v-bind:src=flag class="mflag" :class="{'dark-flag':darkOn}">
-                        </div>
                         <div class="infos">
                           <div class="capital">
                               <h3>{{name}}</h3>
@@ -85,7 +76,10 @@
                             </div>
                           </div>
                     </div>
-                </div>
+                    <div class="button-container">
+                      <button class="modal-button" :class="{'dark1':darkOn}"
+                      @click="modal = false">Close</button>
+                    </div>
                 </div>
             </div>
         </transition>
@@ -188,6 +182,7 @@ export default {
   font-family: 'Nunito Sans', sans-serif;
   overflow-x: hidden;
   min-height: 100vh;
+  color: var(--var-very-dark-blue)
 }
 //navbar--------------------------------
 .nav{
@@ -359,17 +354,17 @@ export default {
   grid-template-columns: 1fr;
   grid-gap: 6vw;
   justify-items: center;
-  @media (min-width: 500px) {
+  @media (min-width: 600px) {
     grid-template-columns: 1fr 1fr;
-    grid-gap: 3vw;
+    grid-gap: 4vw;
   }
   @media (min-width: 768px) {
     grid-template-columns: 1fr 1fr 1fr;
-    grid-gap: 3vw;
+    grid-gap: 2vw;
   }
-  @media (min-width: 1100px) {
+  @media (min-width: 1000px) {
     grid-template-columns: 1fr 1fr 1fr 1fr;
-    grid-gap: 4vw;
+    grid-gap: 2vw;
   }
 }
 
@@ -382,16 +377,28 @@ export default {
     border-radius: 5px;
     box-shadow: 0 0px 4px 1px rgba(204, 204, 204, 0.619);
     @media (min-width: 500px) {
-    width: 45vw;
+    width: 70vw;
     height: 345px;
   }
-    @media (min-width: 768px) {
-      width: 30vw;
+    @media (min-width: 600px) {
+      width: 45vw;
       height: 345px;
     }
-    @media (min-width: 1100px) {
-      width: 20vw;
-      height: 345px;
+    @media (min-width: 700px) {
+      width: 45vw;
+      height: 385px;
+    }
+    @media (min-width: 768px) {
+      width: 30vw;
+      height: 300px;
+    }
+    @media (min-width: 1000px) {
+      width: 22vw;
+      height: 350px;
+    }
+    @media (min-width: 1400px) {
+      width: 340px;
+      height: 380px;
     }
 }
 
@@ -401,22 +408,36 @@ export default {
   }
 
 .flag{
-  object-fit: cover;
+  width: 80vw;
   height: 180px;
+  object-fit: cover;
   border-radius: 5px 5px 0 0;
   -webkit-box-shadow: 0px 2px 1px 0px hsla(0, 0%, 96.5%, 0.79);
   -moz-box-shadow: 0px 2px 1px 0px hsla(0, 0%, 96.5%, 0.79);
   box-shadow: 0px 2px 1px 0px hsla(0, 0%, 96.5%, 0.79);
-  width: 80vw;
   @media (min-width: 500px) {
-    width: 45vw;
-    height: 150px;
+    width: 70vw;
+    height: 190px;
   }
-  @media (min-width: 768px) {
-      width: 30vw;
+  @media (min-width: 600px) {
+      width: 45vw;
+      height: 150px;
     }
-  @media (min-width: 1100px) {
-      width: 20vw;
+    @media (min-width: 700px) {
+      width: 45vw;
+      height: 180px;
+    }
+     @media (min-width: 700px) {
+      width: 30vw;
+      height: 140px;
+    }
+    @media (min-width: 1000px) {
+      width: 22vw;
+      height: 150px;
+    }
+    @media (min-width: 1400px) {
+      width: 340px;
+      height: 200px;
     }
 }
 
@@ -437,54 +458,54 @@ export default {
   justify-content: center;
   align-items: center;
   transition: opacity 0.3s ease;
+  overflow-y: initial !important;
 }
 
 .modal-container {
-  width: 99%;
-  margin: 0px auto;
-  padding: 20px 30px;
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
+  padding: 2vh 30px;
   border-radius: 2px;
   transition: all 0.3s ease;
-  font-family: Helvetica, Arial, sans-serif;
+  font-family: "Nunito Sans", sans-serif;
   background-color: #f5f4f4;
+  color: var(--var-very-dark-blue);
   @media (min-width: 430px) {
-    width: 70%;
     }
   @media (min-width: 540px) {
-    width: 60%;
     }
   @media (min-width: 640px) {
-    width: 50%;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: space-around;
     }
   @media (min-width: 768px) {
-    width: 40%;
     }
   @media (min-width: 992px) {
-    width: 99%;
-    height: 98%;
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
-    padding: 0 10vw;
-    align-items: center;
     }
 }
 
 .modal-content{
   @media (min-width: 992px) {
-    margin-bottom: 7rem;
     }
 }
 
 .info-container {
-  @media (min-width: 992px) {
-    display: flex;
-    justify-content: space-between;
+  @media (min-width: 640px) {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
     }
 }
 
+.button-container{
+  text-align: center;
+}
+
 .modal-button{
-  padding: 10px 20px;
+  margin-top: 4vh;
+  padding: 10px 34px;
   border-radius: 4px;
   background-color: var(--var-white);
   border: none;
@@ -492,8 +513,8 @@ export default {
   -moz-box-shadow: 0 0px 1px 1px rgba(230, 226, 226, 0.62);
   box-shadow: 0 0px 1px 1px rgba(230, 226, 226, 0.62);
   font-size: 14px;
-  @media (min-width: 992px) {
-    margin-bottom: 7rem;
+  @media (min-width: 640px) {
+    margin-top: 0;
     }
 }
 
@@ -505,22 +526,38 @@ export default {
   }
 
 .mflag{
-  object-fit: cover;
+  object-fit: contain;
   width: 100%;
   height: 30vh;
+  align-self: center;
+  justify-self: center;
   -webkit-box-shadow: 0px 2px 1px 0px hsla(0, 0%, 96.5%, 0.79);
   -moz-box-shadow: 0px 2px 1px 0px hsla(0, 0%, 96.5%, 0.79);
   box-shadow: 0px 2px 1px 0px hsla(0, 0%, 96.5%, 0.79);
-  margin: 1.5rem 0 .5rem 0;
-  @media (min-width: 992px) {
-    height: 35vh;
+  @media (min-width: 640px) {
+    height: auto;
+    }
+  @media (min-width: 800px) {
+    max-width: 90%;
+    }
+  @media (min-width: 1000px) {
+    max-width: 400px;
     }
 }
 
 .rest-info{
    @media (min-width: 992px) {
     display: flex;
-    align-items: baseline;
+    align-items: flex-start;
+    }
+}
+
+.infos{
+   @media (min-width: 640px) {
+    margin-left: 5vw;
+    }
+    @media (min-width: 1200px) {
+    margin-left: 3vw;
     }
 }
 
@@ -549,22 +586,25 @@ export default {
     box-shadow: none;
   }
 
+.minfo-right{
+  padding: 10px 0;
+  @media (min-width: 992px) {
+  padding-left: 6vw;
+    }
+  @media (min-width: 1200px) {
+  padding-left: 3vw;
+    }
+}
+
+.minfo-left{
+}
+
 .minfo-left div, .minfo-right div{
   padding: 5px 0;
 }
 
-.minfo-right{
-  margin-top: 1rem;
-}
-.minfo-left{
-  @media (min-width: 992px) {
-  padding: 0 4vw;
-    }
-}
-
 .capital h3{
   @media (min-width: 992px) {
-  padding-left: 4vw;
   font-size: 1.6rem;
     }
 }
