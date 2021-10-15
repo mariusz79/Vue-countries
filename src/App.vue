@@ -40,12 +40,12 @@
         <div class="results">
           <div v-for="key in result" :key="result[key]" class="item"
           :class="{'dark-info':darkOn}" @click="itemClicked(key)">
-              <img v-bind:src=key.flag class="flag" :class="{'dark-flag':darkOn}">
+              <img v-bind:src=key.flags.svg class="flag" :class="{'dark-flag':darkOn}">
             <div class="info" >
-              <h3>{{key.name}}</h3>
+              <h3>{{key.name.common}}</h3>
               <div><b>Population: </b><span>{{addComas(key.population)}}</span></div>
               <div><b>Region: </b>{{key.region}}</div>
-              <div><b>Capital: </b>{{key.capital}}</div>
+              <div><b>Capital: </b>{{key.capital[0]}}</div>
             </div>
           </div>
         </div>
@@ -60,11 +60,10 @@
                           </div>
                           <div class="rest-info">
                             <div class="minfo-left">
-                                <div><b>Native name: </b><span>{{nativeName}}</span></div>
                                 <div><b>Population: </b><span>{{addComas(population)}}</span></div>
                                 <div><b>Region: </b>{{region}}</div>
                                 <div><b>Sub Region: </b>{{subregion}}</div>
-                                <div><b>Capital: </b>{{capital}}</div>
+                                <div><b>Capital: </b>{{capital[0]}}</div>
                               </div>
                             <div class="minfo-right">
                                 <div><b>Top Level Domain: </b>{{topLevelDomain[0]}}</div>
@@ -107,10 +106,7 @@ export default {
       visible: false,
       regionValue: 'Filter by Region',
       darkOn: false,
-      title: 'Toggle Theme',
       modal: false,
-      moonLine: 'https://mariusz-ecommerce.s3-eu-west-1.amazonaws.com/static/Vue/moon-line.svg',
-      moonBlack: 'https://mariusz-ecommerce.s3-eu-west-1.amazonaws.com/static/Vue/moon-black.svg',
     };
   },
   methods: {
@@ -129,40 +125,40 @@ export default {
       this.darkOn = !this.darkOn;
     },
     handleInput() {
-      axios.get(`https://restcountries.eu/rest/v2/name/${this.searchValue}`)
+      axios.get(`https://restcountries.com/v3.1/name/${this.searchValue}`)
         .then((response) => {
           this.result = response.data;
           this.regionValue = 'Filter by Region';
         });
     },
     handleRegion() {
-      axios.get(`https://restcountries.eu/rest/v2/region/${this.regionValue}`)
+      axios.get(`https://restcountries.com/v3.1/region/${this.regionValue}`)
         .then((response) => {
           this.result = response.data;
           this.searchValue = '';
         });
     },
     itemClicked(key) {
-      this.name = key.name;
-      this.flag = key.flag;
-      this.nativeName = key.nativeName;
+      this.name = key.name.common;
+      this.flag = key.flags.svg;
       this.capital = key.capital;
       this.population = key.population;
       this.region = key.region;
       this.subregion = key.subregion;
-      this.topLevelDomain = key.topLevelDomain;
-      this.currencies = key.currencies[0].name;
+      this.topLevelDomain = key.tld;
       const lang = key.languages;
       const langs = [];
-      for (let item = 0; item < lang.length; item += 1) {
-        langs.push(lang[item].name);
-      }
+      Object.entries(lang).forEach(([key]) => { langs.push(lang[key]); });
       this.languages = langs.join(', ');
+      const { currencies } = key;
+      const currency = [];
+      Object.entries(currencies).forEach(([key]) => { currency.push(currencies[key].name); });
+      this.currencies = currency.join(', ');
       this.modal = !this.modal;
     },
   },
   created() {
-    axios.get('https://restcountries.eu/rest/v2/region/europe')
+    axios.get('https://restcountries.com/v3.1/region/europe')
       .then((response) => {
         this.result = response.data;
       });
