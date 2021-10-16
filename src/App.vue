@@ -45,7 +45,8 @@
               <h3>{{key.name.common}}</h3>
               <div><b>Population: </b><span>{{addComas(key.population)}}</span></div>
               <div><b>Region: </b>{{key.region}}</div>
-              <div><b>Capital: </b>{{key.capital[0]}}</div>
+              <div v-if="key.capital"><b>Capital: </b>{{key.capital[0]}}</div>
+              <div v-else-if="!key.capital"><b>Capital: </b>No data</div>
             </div>
           </div>
         </div>
@@ -63,7 +64,8 @@
                                 <div><b>Population: </b><span>{{addComas(population)}}</span></div>
                                 <div><b>Region: </b>{{region}}</div>
                                 <div><b>Sub Region: </b>{{subregion}}</div>
-                                <div><b>Capital: </b>{{capital[0]}}</div>
+                                <div v-if="capital"><b>Capital: </b>{{capital[0]}}</div>
+                                <div v-else-if="!capital"><b>Capital: </b>No data</div>
                               </div>
                             <div class="minfo-right">
                                 <div><b>Top Level Domain: </b>{{topLevelDomain[0]}}</div>
